@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TikTok Pro — Descarga Profesional de Videos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script src="https://unpkg.com/alpinejs@3.x.x" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'sans': ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              300: '#6ee7b7',
+              400: '#34d399',
+              500: '#3ECF8E',
+              600: '#2EB67D',
+              700: '#249E6B',
+              800: '#1E7F56',
+              900: '#145A3C'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+  <!-- Header -->
+  <header class="border-b border-gray-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-4">
+          <div class="w-8 h-8 bg-gradient-to-r from-brand-400 to-brand-600 rounded-lg flex items-center justify-center">
+            <span class="text-white font-bold text-sm">T</span>
+          </div>
+          <h1 class="text-xl font-bold">TikTok Pro</h1>
+        </div>
+        <nav class="flex space-x-6">
+          <a href="/" class="text-brand-400 hover:text-brand-300">Inicio</a>
+          <a href="/youtube" class="text-gray-400 hover:text-white">YouTube</a>
+          <a href="/instagram" class="text-gray-400 hover:text-white">Instagram</a>
+          <a href="/audio" class="text-gray-400 hover:text-white">Audio</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Hero Section -->
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold mb-4">
+        Descarga Videos de <span class="text-brand-400">TikTok</span> Profesionalmente
+      </h2>
+      <p class="text-xl text-gray-400 mb-8">
+        Herramienta avanzada con sistema anti-rate limiting y múltiples fallbacks
+      </p>
+    </div>
+
+    <!-- Download Form -->
+    <div class="bg-gray-800 rounded-xl p-8 shadow-xl">
+      <form id="downloadForm" class="space-y-6">
+        <div>
+          <label class="block text-sm font-medium mb-2">URL del Perfil o Video de TikTok</label>
+          <input 
+            type="url" 
+            name="profile_url" 
+            placeholder="https://www.tiktok.com/@username o https://www.tiktok.com/@username/video/123..."
+            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+            required
+          />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium mb-2">Máximo de Videos (opcional)</label>
+            <input 
+              type="number" 
+              name="max_videos" 
+              placeholder="10"
+              min="1"
+              max="100"
+              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Directorio de Descarga</label>
+            <input 
+              type="text" 
+              name="output_root" 
+              placeholder="{{ default_output }}"
+              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+            />
+          </div>
+        </div>
+
+        <button 
+          type="submit"
+          class="w-full bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
+        >
+          🚀 Iniciar Descarga
+        </button>
+      </form>
+    </div>
+
+    <!-- Status Display -->
+    <div id="statusContainer" class="mt-8 hidden">
+      <div class="bg-gray-800 rounded-xl p-6">
+        <h3 class="text-lg font-semibold mb-4">Estado de la Descarga</h3>
+        <div id="statusContent"></div>
+      </div>
+    </div>
+
+    <!-- Features -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center">
+        <div class="w-12 h-12 bg-brand-500 rounded-lg mx-auto mb-4 flex items-center justify-center">
+          <span class="text-2xl">⚡</span>
+        </div>
+        <h3 class="text-lg font-semibold mb-2">Rate Limiting Inteligente</h3>
+        <p class="text-gray-400">Sistema avanzado de reintentos con backoff exponencial</p>
+      </div>
+      <div class="text-center">
+        <div class="w-12 h-12 bg-brand-500 rounded-lg mx-auto mb-4 flex items-center justify-center">
+          <span class="text-2xl">🔄</span>
+        </div>
+        <h3 class="text-lg font-semibold mb-2">Múltiples Fallbacks</h3>
+        <p class="text-gray-400">Diferentes métodos de extracción para máxima compatibilidad</p>
+      </div>
+      <div class="text-center">
+        <div class="w-12 h-12 bg-brand-500 rounded-lg mx-auto mb-4 flex items-center justify-center">
+          <span class="text-2xl">📊</span>
+        </div>
+        <h3 class="text-lg font-semibold mb-2">Progreso en Tiempo Real</h3>
+        <p class="text-gray-400">Monitoreo detallado del estado de descarga</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('downloadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const statusContainer = document.getElementById('statusContainer');
+      const statusContent = document.getElementById('statusContent');
+      
+      statusContainer.classList.remove('hidden');
+      statusContent.innerHTML = '<div class="text-brand-400">Iniciando descarga...</div>';
+      
+      try {
+        const response = await fetch('/api/jobs', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+          pollJobStatus(result.job_id);
+        } else {
+          statusContent.innerHTML = `<div class="text-red-400">Error: ${result.detail || 'Error desconocido'}</div>`;
+        }
+      } catch (error) {
+        statusContent.innerHTML = `<div class="text-red-400">Error de conexión: ${error.message}</div>`;
+      }
+    });
+    
+    async function pollJobStatus(jobId) {
+      const statusContent = document.getElementById('statusContent');
+      
+      const poll = async () => {
+        try {
+          const response = await fetch(`/api/jobs/${jobId}`);
+          const job = await response.json();
+          
+          let statusHtml = `
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="font-medium">Estado:</span>
+                <span class="px-3 py-1 rounded-full text-sm ${getStatusColor(job.status)}">${getStatusText(job.status)}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-medium">Progreso:</span>
+                <span>${Math.round(job.progress * 100)}%</span>
+              </div>
+              <div class="w-full bg-gray-700 rounded-full h-2">
+                <div class="bg-brand-500 h-2 rounded-full transition-all duration-300" style="width: ${job.progress * 100}%"></div>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-medium">Descargados:</span>
+                <span class="text-brand-400">${job.downloaded}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="font-medium">Fallidos:</span>
+                <span class="text-red-400">${job.failed}</span>
+              </div>
+              ${job.message ? `<div class="text-sm text-gray-400 mt-2">${job.message}</div>` : ''}
+            </div>
+          `;
+          
+          statusContent.innerHTML = statusHtml;
+          
+          if (job.status === 'running' || job.status === 'queued') {
+            setTimeout(poll, 2000);
+          }
+        } catch (error) {
+          statusContent.innerHTML = `<div class="text-red-400">Error al obtener estado: ${error.message}</div>`;
+        }
+      };
+      
+      poll();
+    }
+    
+    function getStatusColor(status) {
+      switch (status) {
+        case 'completed': return 'bg-green-500 text-white';
+        case 'running': return 'bg-brand-500 text-white';
+        case 'failed': return 'bg-red-500 text-white';
+        case 'cancelled': return 'bg-gray-500 text-white';
+        default: return 'bg-gray-600 text-white';
+      }
+    }
+    
+    function getStatusText(status) {
+      switch (status) {
+        case 'completed': return 'Completado';
+        case 'running': return 'Descargando';
+        case 'failed': return 'Fallido';
+        case 'cancelled': return 'Cancelado';
+        case 'queued': return 'En Cola';
+        default: return status;
+      }
+    }
+  </script>
+</body>
+</html>
